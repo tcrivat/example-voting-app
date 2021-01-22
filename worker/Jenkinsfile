@@ -37,7 +37,7 @@ pipeline {
                 echo 'Packaging worker app'
                 dir('worker') {
                     sh 'mvn package -DskipTests'
-                    archiveArtifacts artifacts: 'worker/target/*.jar', fingerprint: true
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
                 }
             }
         }
@@ -46,6 +46,12 @@ pipeline {
     post {
         always {
             echo 'Building multibranch pipeline for worker is completed...'
+        }
+        failiure {
+            slackSend (channel: "test", message: "Build Failed - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+        }
+        success {
+            slackSend (channel: "test", message: "Build Succeeded - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
         }
     }
 }
