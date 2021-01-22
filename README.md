@@ -1,6 +1,8 @@
 Example Voting App
 =========
 
+This is a sample voting app.
+
 [![Build Status](http://83.85.107.185:8080/buildStatus/icon?job=instavote%2Fworker-build&subject=Build)](http://83.85.107.185:8080/job/instavote/job/worker-build/)
 
 [![Build Status](http://83.85.107.185:8080/buildStatus/icon?job=instavote%2Fworker-test&subject=UnitTest)](http://83.85.107.185:8080/job/instavote/job/worker-test/)
