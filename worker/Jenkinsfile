@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:alpine'
-            args '-v $HOME/.m2:/root/.m2'
+            args '-v $HOME/.m2/repository:/repository -e MAVEN_OPTS="-Dmaven.repo.local=/repository"'
         }
     }
     
