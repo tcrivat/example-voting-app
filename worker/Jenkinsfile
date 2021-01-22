@@ -13,7 +13,7 @@ pipeline {
 //            }
             steps {
                 echo 'Compiling worker app'
-                echo '================> $HOME_LOCATION'
+                sh 'echo ================> $HOME_LOCATION'
                 dir('worker') {
                     sh 'mvn compile'
                 }
