@@ -2,27 +2,26 @@ pipeline {
     agent {
         docker {
             image 'maven:3.6.1-jdk-8-slim'
-            args '-v $HOME/.m2:/root/.m2 -e HOME_LOCATION=$HOME'
+            args '-v $HOME/.m2:/root/.m2 -u root'
         }
     }
     
     stages {
         stage("build") {
-            when {
-                changeset "worker/**"
-            }
+//            when {
+//                changeset "worker/**"
+//            }
             steps {
                 echo 'Compiling worker app'
                 dir('worker') {
                     sh 'mvn compile'
                 }
-                sh 'sleep 10000'
             }
         }
         stage("test") {
-            when {
-                changeset "worker/**"
-            }
+//            when {
+//                changeset "worker/**"
+//            }
             steps {
                 echo 'Running Unit Tets on worker app'
                 dir('worker') {
@@ -31,10 +30,10 @@ pipeline {
             }
         }
         stage("package") {
-            when {
-                branch 'master'
-                changeset "worker/**"
-            }
+//            when {
+//                branch 'master'
+//                changeset "worker/**"
+//            }
             steps {
                 echo 'Packaging worker app'
                 dir('worker') {
