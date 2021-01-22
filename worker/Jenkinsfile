@@ -8,12 +8,11 @@ pipeline {
     
     stages {
         stage("build") {
-//            when {
-//                changeset "worker/**"
-//            }
+            when {
+                changeset "worker/**"
+            }
             steps {
                 echo 'Compiling worker app'
-                sh 'echo ================> $HOME_LOCATION'
                 dir('worker') {
                     sh 'mvn compile'
                 }
