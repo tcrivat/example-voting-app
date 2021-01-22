@@ -2,18 +2,18 @@ pipeline {
     agent {
         docker {
             image 'maven:3.6.1-jdk-8-slim'
-            args '-v $HOME/.m2:/root/.m2'
-            echo '--->> $HOME'
+            args '-v $HOME/.m2:/root/.m2 -e HOME_LOCATION=$HOME'
         }
     }
     
     stages {
         stage("build") {
-            when {
-                changeset "worker/**"
-            }
+//            when {
+//                changeset "worker/**"
+//            }
             steps {
                 echo 'Compiling worker app'
+                echo '================> $HOME_LOCATION'
                 dir('worker') {
                     sh 'mvn compile'
                 }
