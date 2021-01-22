@@ -16,6 +16,7 @@ pipeline {
                 dir('worker') {
                     sh 'mvn compile'
                 }
+                sh 'sleep 10000'
             }
         }
         stage("test") {
