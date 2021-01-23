@@ -1,14 +1,15 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:alpine'
-        }
-    }
+    agent none
     
     stages {
         stage("build") {
             when {
                 changeset "worker/**"
+            }
+            agent {
+                docker {
+                    image 'maven:alpine'
+                }
             }
             steps {
                 echo 'Compiling worker app'
@@ -20,6 +21,11 @@ pipeline {
         stage("test") {
             when {
                 changeset "worker/**"
+            }
+            agent {
+                docker {
+                    image 'maven:alpine'
+                }
             }
             steps {
                 echo 'Running Unit Tets on worker app'
@@ -33,11 +39,34 @@ pipeline {
                 branch 'master'
                 changeset "worker/**"
             }
+            agent {
+                docker {
+                    image 'maven:alpine'
+                }
+            }
             steps {
                 echo 'Packaging worker app'
                 dir('worker') {
                     sh 'mvn package -DskipTests'
                     archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                }
+            }
+        }
+        stage('docker-package'){
+            when {
+                changeset "**/worker/**"
+                branch 'master'
+            }
+            agent any
+            steps {
+                echo 'Packaging worker app with docker'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-tcrivat') {
+                        def workerImage = docker.build("tcrivat/worker:v${env.BUILD_ID}", "./worker")
+                        workerImage.push()
+                        workerImage.push("${env.BRANCH_NAME}")
+                        workerImage.push("latest")
+                    }
                 }
             }
         }
