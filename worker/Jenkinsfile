@@ -52,10 +52,10 @@ pipeline {
                 }
             }
         }
-        stage('docker-package'){
+        stage('docker-package') {
             when {
-                changeset "**/worker/**"
                 branch 'master'
+                changeset "worker/**"
             }
             agent any
             steps {
@@ -68,6 +68,16 @@ pipeline {
                         workerImage.push("latest")
                     }
                 }
+            }
+        }
+        stage('deploy to dev') {
+            agent any
+            when {
+                branch 'master'
+            }
+            steps {
+                echo 'Deploy instavote app with docker compose'
+                sh 'docker-compose up -d'
             }
         }
     }
